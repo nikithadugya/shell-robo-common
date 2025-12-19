@@ -1,7 +1,7 @@
 #!/bin/bash
 
 source ./common.sh
-app_name=catalogue
+app_name=catalogue  #### catalogue is the changing name so so developer gives that whatever we give it takes so giving it in a variable 
 
 app_setup ### here app_setup doesnot require any dependency on nodejs_setup so first
 nodejs_setup
