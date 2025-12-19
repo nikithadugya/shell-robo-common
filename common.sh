@@ -13,6 +13,7 @@ SCRIPT_NAME=$( echo $0 | cut -d "." -f1 ) # $0 --> Current file name  --> 14-log
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 START_TIME=$(date +%s)
 MONGODB_HOST="mongodb.dawsnikitha.fun"
+SCRIPT_DIR="$PWD"
 
 
 mkdir -p $LOGS_FOLDER  # -p means if directory is not there it creates if directory is there is keeps quiet
