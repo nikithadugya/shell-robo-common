@@ -26,3 +26,6 @@ VALIDATE $? "Restarted MongoDB"
 
 
 print_total_time
+
+
+# Execute in MobaXterm on server like sudo sh mongo.sh
