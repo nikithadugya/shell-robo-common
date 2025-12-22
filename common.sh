@@ -51,24 +51,45 @@ nodejs_setup(){
 
 ##app-setup
 app_setup(){
+      id roboshop &>>$LOG_FILE
+    if [ $? -ne 0 ]; then
+         useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
+        VALIDATE $? "Creating System User"
+    else
+         echo -e "User already exist.... $Y SKIPPING $N"
+    fi
+
     mkdir -p /app  # If already directory is present then -p mentioning ignores and next if not there it creates
     VALIDATE $? "Creating App Directory"
+
     curl -o /tmp/$app_name.zip https://roboshop-artifacts.s3.amazonaws.com/$app_name-v3.zip &>>$LOG_FILE
     VALIDATE $? "DOwnloading $app_name application"
+
     cd /app 
     VALIDATE $? "Changing to App Directory" # Here we got error because if files already present in app folder then it throws error so before only we are deleting
+    
     rm -rf /app/*
     unzip /tmp/$app_name.zip &>>$LOG_FILE
     VALIDATE $? "Unzip $app_name"
 }
 
+
+java_setup(){
+    mvn clean package
+    VALIDATE $? "Cleaning package"
+ 
+    mv target/shipping-1.0.jar shipping.jar 
+    VALIDATE $? "Renaming the artifact"
+
+}
+
 systemd_setup(){
-    cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
+    cp $SCRIPT_DIR/$app_name.service /etc/systemd/system/$app_name.service
     VALIDATE $? "Copy systemctl services"
     systemctl daemon-reload
     VALIDATE $? "demon reload"
-    systemctl enable catalogue &>>$LOG_FILE
-    VALIDATE $? "enabling catalogue"
+    systemctl enable $app_name &>>$LOG_FILE
+    VALIDATE $? "enabling $app_name"
 }
 
 #Printing time
